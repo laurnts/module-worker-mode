@@ -59,10 +59,7 @@ class Layout extends \Magento\Framework\View\Layout implements ResetAfterRequest
     }
 
     /**
-     * Set the layout's own cacheable flag for the current request.
-     *
-     * Used for nested layouts that live across requests (see Plugin\Pricing\Render\LayoutCacheablePlugin):
-     * their constructor-time flag is stale, and _resetState() restores it to true.
+     * Set the cacheable flag for the current request.
      *
      * @param bool $cacheable
      * @return void

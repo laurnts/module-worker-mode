@@ -53,12 +53,7 @@
                 type="MageOS\WorkerMode\Plugin\Checkout\Model\Session\PreserveOrderDataPlugin"/>
     </type>
 
-    <!--
-        Pricing\Render\Layout keeps a nested layout created once (constructor) with the first request's
-        cacheable flag, and Layout::_resetState() restores it to true. Its generateElements() then makes
-        PageCache LayoutPlugin send "Cache-Control: public" for non-cacheable pages (cart, login, account),
-        which Varnish caches. The plugin copies the page layout's current isCacheable() before loadLayout().
-    -->
+    <!-- Pricing render keeps a nested layout across requests; sync its cacheable flag per request. -->
     <type name="Magento\Framework\Pricing\Render\Layout">
         <plugin name="mage_os_worker_mode_pricing_layout_cacheable"
                 type="MageOS\WorkerMode\Plugin\Pricing\Render\LayoutCacheablePlugin"/>

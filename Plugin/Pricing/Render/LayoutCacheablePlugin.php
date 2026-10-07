@@ -8,17 +8,7 @@ use Magento\Framework\View\LayoutInterface;
 use MageOS\WorkerMode\Model\View\Layout as WorkerLayout;
 
 /**
- * Keeps the pricing render's nested layout in step with the current page's cacheability.
- *
- * Pricing\Render\Layout creates its nested layout once, in its constructor, with
- * ['cacheable' => $generalLayout->isCacheable()]. In a worker the object lives across requests, and
- * Layout::_resetState() restores $cacheable = true on every layout, so the nested layout always reports
- * cacheable. When it generates elements, PageCache's LayoutPlugin then calls setPublicHeaders() on the
- * shared response, and non-cacheable pages (cart, login, customer account) are sent as
- * "Cache-Control: public, max-age=86400" and cached by Varnish.
- *
- * Before the nested layout is generated, copy the page layout's current isCacheable() onto it.
- * Relies on isIsolated=false (etc/di.xml), so the shared LayoutInterface is the page's layout.
+ * Sync the pricing render's nested layout with the current page's cacheable flag.
  */
 class LayoutCacheablePlugin
 {
@@ -27,7 +17,7 @@ class LayoutCacheablePlugin
     ) {}
 
     /**
-     * Sync the nested layout's cacheable flag before loadLayout() generates its elements.
+     * Copy the page layout's cacheable flag to the nested layout before it is generated.
      *
      * @param PriceLayout $subject
      * @return void
